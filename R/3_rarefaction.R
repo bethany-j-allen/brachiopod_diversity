@@ -1,5 +1,5 @@
 #Bethany Allen   19th September 2024
-#Code to calculate raw diversity through time
+#Code to calculate rarefied diversity through time
 
 #setwd("#####")
 
