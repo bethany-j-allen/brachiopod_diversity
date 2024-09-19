@@ -18,7 +18,7 @@ glimpse(fossils)
 #Count unique species per stage bin
 species_counts <- fossils %>%
                   filter(identified_rank == "species") %>%
-                  distinct(identified_name, stage_bin, .keep_all = T) %>%
+                  distinct(accepted_name, stage_bin, .keep_all = T) %>%
                   count(stage_bin)
 
 #Count formations per stage bin
@@ -29,8 +29,8 @@ formation_counts <- fossils %>%
 
 #Bind
 counts <- data.frame(stage = species_counts$stage_bin,
-                     species = species_counts$n,
-                     formations = formation_counts$n)
+                     formations = formation_counts$n,
+                     raw_species = species_counts$n)
 counts <- arrange(counts, factor(stage, levels = stages))
 
 #Save
