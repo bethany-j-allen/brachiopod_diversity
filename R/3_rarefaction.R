@@ -45,3 +45,9 @@ for (j in 1:length(stages)) {
 
 #Label stages
 colnames(subsampled_richness) <- stages
+
+#Summarise data
+medians <- apply(subsampled_richness, 2, median)
+maxes <- apply(subsampled_richness, 2, max)
+mins <- apply(subsampled_richness, 2, min)
+summary <- data.frame(max = maxes, median = medians, min = mins)
