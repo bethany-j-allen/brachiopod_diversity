@@ -5,6 +5,7 @@
 
 #Load packages
 library(tidyverse)
+library(palaeoverse)
 
 #Create a vector giving the chronological order of stages
 stages <- c("Asselian", "Sakmarian", "Artinskian", "Kungurian", "Roadian",
@@ -34,4 +35,4 @@ counts <- data.frame(stage = species_counts$stage_bin,
 counts <- arrange(counts, factor(stage, levels = stages))
 
 #Save
-write_csv(counts, "data/raw_counts.csv")
+write_csv(counts, "data/counts.csv")
