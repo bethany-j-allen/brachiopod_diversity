@@ -30,10 +30,10 @@ akaike.wts<- function(aa)
 }
 
 #Load data
-raw_counts <- read.csv("data/raw_counts.csv")
+raw_counts <- read.csv("data/counts.csv")
 
 #Rename variables to fit the model parameters
-#time <- raw_counts$age
+time <- raw_counts$mid_ma
 div <- raw_counts$raw_species
 proxy <- raw_counts$formations
 
