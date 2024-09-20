@@ -15,8 +15,9 @@ stages <- c("Asselian", "Sakmarian", "Artinskian", "Kungurian", "Roadian",
 fossils <- read_csv("data/brachiopods_clean.csv")
 glimpse(fossils)
 
-#Generate list of frequencies by substage
-#Achieved by using and trimming the 'count' function in dplyr, across a loop of substage names
+#Generate list of frequencies by stage
+#Achieved by using and trimming the 'count' function in dplyr,
+# across a loop of stage names
 stage_freq <- list()
 
 for (k in 1:length(stages)) {
