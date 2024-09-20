@@ -34,5 +34,10 @@ counts <- data.frame(stage = species_counts$stage_bin,
                      raw_species = species_counts$n)
 counts <- arrange(counts, factor(stage, levels = stages))
 
+#Add stage midpoints
+midpoint_data <- select(GTS2020, interval_name, mid_ma)
+counts <- left_join(counts, midpoint_data, by = join_by(stage == interval_name))
+counts <- relocate(counts, mid_ma, .after = stage)
+
 #Save
 write_csv(counts, "data/counts.csv")
