@@ -1,6 +1,6 @@
 
 # options
-reps <- 2 # replicates for age uncertainty, we probably want 50+
+reps <- 2 # replicates for age uncertainty, try 10+
 species <- TRUE # use FALSE for genera
 input <- "../data/brachiopods_clean.csv"
 

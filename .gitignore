@@ -5,3 +5,6 @@
 .DS_Store
 
 *.Rproj
+
+*__pycache__
+*pyrate_mcmc_logs
