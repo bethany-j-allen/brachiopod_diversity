@@ -16,6 +16,7 @@ module load Bioinformatics/Software/vital-it
 python3 PyRate.py test1_FALA.${SLURM_ARRAY_TASK_ID}.py -A 0 -FBDrange 2 -n 5000000 -p 1000000 -s 5000
 
 # I think you should be able to do something like the following
-#python3 PyRate.py ~/brachiopod_diversity/pyrate/genus/genus.py -qShift ~/brachiopod_diversity/pyrate/epochs.txt -j ${SLURM_ARRAY_TASK_ID}
+# python3 PyRate.py ~/brachiopod_diversity/pyrate/genus/genus.py -qShift ~/brachiopod_diversity/pyrate/epochs.txt -j ${SLURM_ARRAY_TASK_ID}
+# More info on submitted job arrays: https://slurm.schedmd.com/job_array.html
 
 sleep 1
