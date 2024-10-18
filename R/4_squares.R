@@ -5,6 +5,8 @@
 
 #Load packages
 library(tidyverse)
+library(palaeoverse)
+library(deeptime)
 
 #Create a vector giving the chronological order of stages
 stages <- c("Asselian", "Sakmarian", "Artinskian", "Kungurian", "Roadian",
@@ -47,4 +49,19 @@ for(i in 1:length(stage_freq)) {
 }
 
 #Label squares estimates with stages
-summary <- data.frame(stages, squares = squares_list)
+summary <- data.frame(stage = stages, squares = squares_list)
+
+#Add stage midpoints
+midpoint_data <- select(GTS2020, interval_name, max_ma, mid_ma, min_ma)
+summary<- left_join(summary, midpoint_data, by = join_by(stage == interval_name))
+
+#Plot
+ggplot(summary, aes(x = mid_ma, y = squares)) +
+  geom_line(linewidth = 2) + scale_x_reverse() +
+  labs(x = "Ma", y = "Squares diversity") +
+  coord_geo(xlim = c(max(counts$max_ma), min(counts$min_ma)),
+            pos = as.list(rep("bottom", 2)),
+            dat = list("stages", "periods"),
+            height = list(unit(4, "lines"), unit(2, "line")),
+            rot = list(90, 0), size = list(2.5, 5), abbrv = FALSE) +
+  theme_classic() + theme(legend.title=element_blank())

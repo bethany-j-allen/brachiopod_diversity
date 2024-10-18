@@ -5,6 +5,8 @@
 
 #Load packages
 library(tidyverse)
+library(palaeoverse)
+library(deeptime)
 
 #Create a vector giving the chronological order of stages
 stages <- c("Asselian", "Sakmarian", "Artinskian", "Kungurian", "Roadian",
@@ -50,4 +52,21 @@ colnames(subsampled_richness) <- stages
 medians <- apply(subsampled_richness, 2, median)
 maxes <- apply(subsampled_richness, 2, max)
 mins <- apply(subsampled_richness, 2, min)
-summary <- data.frame(max = maxes, median = medians, min = mins)
+summary <- data.frame(stage = stages, max = maxes, median = medians, min = mins)
+
+#Add stage midpoints
+midpoint_data <- select(GTS2020, interval_name, max_ma, mid_ma, min_ma)
+summary <- left_join(summary, midpoint_data, by = join_by(stage == interval_name))
+
+#Plot
+ggplot(summary, aes(x = mid_ma, y = median)) +
+  geom_ribbon(aes(ymax = max, ymin = min), alpha = 0.5) +
+  geom_line(linewidth = 2) +
+  scale_x_reverse() +
+  labs(x = "Ma", y = "Rarefied diversity") +
+  coord_geo(xlim = c(max(summary$max_ma), min(summary$min_ma)),
+            pos = as.list(rep("bottom", 2)),
+            dat = list("stages", "periods"),
+            height = list(unit(4, "lines"), unit(2, "line")),
+            rot = list(90, 0), size = list(2.5, 5), abbrv = FALSE) +
+  theme_classic() + theme(legend.title=element_blank())

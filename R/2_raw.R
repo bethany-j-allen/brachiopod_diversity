@@ -6,6 +6,7 @@
 #Load packages
 library(tidyverse)
 library(palaeoverse)
+library(deeptime)
 
 #Create a vector giving the chronological order of stages
 stages <- c("Asselian", "Sakmarian", "Artinskian", "Kungurian", "Roadian",
@@ -35,9 +36,19 @@ counts <- data.frame(stage = species_counts$stage_bin,
 counts <- arrange(counts, factor(stage, levels = stages))
 
 #Add stage midpoints
-midpoint_data <- select(GTS2020, interval_name, mid_ma)
+midpoint_data <- select(GTS2020, interval_name, max_ma, mid_ma, min_ma)
 counts <- left_join(counts, midpoint_data, by = join_by(stage == interval_name))
-counts <- relocate(counts, mid_ma, .after = stage)
 
 #Save
 write_csv(counts, "data/counts.csv")
+
+#Plot
+ggplot(counts, aes(x = mid_ma, y = raw_species)) +
+  geom_line(linewidth = 2) + scale_x_reverse() +
+  labs(x = "Ma", y = "Raw count") +
+  coord_geo(xlim = c(max(counts$max_ma), min(counts$min_ma)),
+            pos = as.list(rep("bottom", 2)),
+            dat = list("stages", "periods"),
+            height = list(unit(4, "lines"), unit(2, "line")),
+            rot = list(90, 0), size = list(2.5, 5), abbrv = FALSE) +
+  theme_classic() + theme(legend.title=element_blank())
