@@ -4,6 +4,8 @@
 .Ruserdata
 .DS_Store
 
+data/brachiopods_raw.csv
+
 *.Rproj
 
 *__pycache__
