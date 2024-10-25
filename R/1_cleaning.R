@@ -17,16 +17,33 @@ substages <- c("Griesbachian", "Dienerian", "Smithian", "Spathian", "Aegean",
 
 
 #Read in dataset
-fossils <- read_csv("data/brachiopods_raw.csv", skip = 20)
+fossils <- read_csv("data/brachiopods_raw.csv", skip = 21)
 glimpse(fossils)
 
-#Add filters to remove uncertain IDs
-#fossils <- fossils %>% filter(!str_detect(identified_name, " cf")) %>%
-# filter(!str_detect(identified_name, " aff")) %>%
-# filter(!str_detect(identified_name, '"')) %>%
-# filter(!str_detect(identified_name, " \\?")) %>%
-# filter(!str_detect(identified_name, "ex gr."))
+#Filter to fossils originally identified to the species level
+fossils <- filter(fossils, identified_rank == "species")
 
+#Retain uncatalogued species
+#If an occurrence is IDed to species level but the species hasn't been entered
+# into the database, convert its accepted name/rank to the species rather than
+# the genus
+for (j in 1:nrow(fossils)){
+  if(!is.na(fossils$difference[j]))
+    (if (fossils$difference[j] == "species not entered"){
+      fossils$accepted_name[j] <- fossils$identified_name[j]
+      fossils$accepted_rank[j] <- "species"})
+}
+
+#Filter to fossils whose accepted rank is (now) species or subspecies
+fossils <- filter(fossils, accepted_rank %in% c("species", "subspecies"))
+
+#Remove subgenera from species names (remove string between brackets)
+fossils$accepted_name <- gsub("\\s*\\([^\\)]+\\)","",
+                              fossils$accepted_name)
+
+#Remove subspecies from species names (remove third "word")
+fossils$accepted_name <- sub("^(\\S*\\s+\\S+).*", "\\1",
+                                        fossils$accepted_name)
 
 #Bin occurrences by stage
 #Create column for stage designation
@@ -62,36 +79,22 @@ for (i in 1:nrow(fossils)){
 #Remove occurrences undated at stage resolution
 fossils <- filter(fossils, !is.na(stage_bin))
 
-
-#Retain uncatalogued species
-#If an occurrence is to species level but the species hasn't been entered into the database, convert
-# its accepted name/rank to the species rather than the genus
-for (j in 1:nrow(fossils)){
-  if(!is.na(fossils$difference[j]))
-    (if (fossils$difference[j] == "species not entered"){
-      fossils$accepted_name[j] <- fossils$identified_name[j]
-      fossils$accepted_rank[j] <- "species"})
-}
-
-
 #Pool collections to produce unique spatio-temporal units
 #Collapse together collections which have the same time bins and coordinates to
 # 2dp (and are likely different beds from the same locality)
-fossils <- mutate(fossils, lng = round(lng, digits = 2), lat = round(lat, digits = 2))
+fossils <- mutate(fossils, lng = round(lng, digits = 2),
+                           lat = round(lat, digits = 2))
 unique_points <- fossils %>%
   dplyr::select(collection_no_pooled = collection_no, lng, lat, stage_bin) %>%
   distinct(lng, lat, stage_bin, .keep_all = T)
 fossils <- left_join(fossils, unique_points, by = c("lng", "lat", "stage_bin"))
 
-
 #Remove synonymy repeats (combinations of the same *pooled* collection no. AND
 # accepted name)
 fossils <- distinct(fossils, accepted_name, collection_no_pooled, .keep_all = T)
 
-
 #Summarise distribution of occurrences
 count(fossils, stage_bin)
-
 
 #Save cleaned dataset
 write.csv(fossils, "data/brachiopods_clean.csv", row.names = F)
