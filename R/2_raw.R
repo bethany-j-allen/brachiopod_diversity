@@ -19,19 +19,17 @@ glimpse(fossils)
 
 #Count unique species per stage bin
 species_counts <- fossils %>%
-                  filter(identified_rank == "species") %>%
                   distinct(accepted_name, stage_bin, .keep_all = T) %>%
                   count(stage_bin)
 
-#Count formations per stage bin
-formation_counts <- fossils %>%
-                    filter(!is.na(formation)) %>%
-                    distinct(formation, stage_bin, .keep_all = T) %>%
-                    count(stage_bin)
+#Count unique genera per stage bin
+genus_counts <- fossils %>%
+                distinct(genus, stage_bin, .keep_all = T) %>%
+                count(stage_bin)
 
 #Bind
 counts <- data.frame(stage = species_counts$stage_bin,
-                     formations = formation_counts$n,
+                     raw_genera = genus_counts$n,
                      raw_species = species_counts$n)
 counts <- arrange(counts, factor(stage, levels = stages))
 
@@ -42,13 +40,24 @@ counts <- left_join(counts, midpoint_data, by = join_by(stage == interval_name))
 #Save
 write_csv(counts, "data/counts.csv")
 
-#Plot
+#Plot species
 ggplot(counts, aes(x = mid_ma, y = raw_species)) +
   geom_line(linewidth = 2) + scale_x_reverse() +
-  labs(x = "Ma", y = "Raw count") +
+  labs(x = "Ma", y = "Raw species count") +
   coord_geo(xlim = c(max(counts$max_ma), min(counts$min_ma)),
             pos = as.list(rep("bottom", 2)),
             dat = list("stages", "periods"),
             height = list(unit(4, "lines"), unit(2, "line")),
             rot = list(90, 0), size = list(2.5, 5), abbrv = FALSE) +
-  theme_classic() + theme(legend.title=element_blank())
+  theme_classic() + theme(legend.title = element_blank())
+
+#Plot genera
+ggplot(counts, aes(x = mid_ma, y = raw_genera)) +
+  geom_line(linewidth = 2) + scale_x_reverse() +
+  labs(x = "Ma", y = "Raw genus count") +
+  coord_geo(xlim = c(max(counts$max_ma), min(counts$min_ma)),
+            pos = as.list(rep("bottom", 2)),
+            dat = list("stages", "periods"),
+            height = list(unit(4, "lines"), unit(2, "line")),
+            rot = list(90, 0), size = list(2.5, 5), abbrv = FALSE) +
+  theme_classic() + theme(legend.title = element_blank())
