@@ -1,30 +1,36 @@
+#Rachel Warnock  10th October 2024
+#Code to prepare data for input into PyRate
 
-# options
-reps <- 2 # replicates for age uncertainty, try 10+
-species <- TRUE # use FALSE for genera
-input <- "../data/brachiopods_clean.csv"
-
+#Set options
+#Choose number of replicates for age uncertainty (50?)
+reps <- 2
+#Set species = TRUE for species, species = FALSE for genera
+species <- TRUE
+#Set seed
 set.seed(123)
 
-data <- read.csv(file = input, sep = ",", header = TRUE)
+#Read in data
+data <- read.csv(file = "data/brachiopods_clean.csv", sep = ",",
+                 header = TRUE)
 
-# always only use samples known at the species level
-dat.sp <- data[which(data$accepted_rank == "species"),]
+#Print number of unique species and genera
+length(unique(data$accepted_name))
+length(unique(data$genus))
 
-# number of unique species and genera
-length(unique(dat.sp$accepted_name)) #5287
-length(unique(dat.sp$genus)) #1004
+#Create an input file for pyrate
+#Designate file name
+file = ifelse(species, paste0("data/pyrate_species.py"),
+              paste0("data/pyrate_genera.py"))
 
-# create an input files for pyrate
+#Extract taxon names
+if(species) names = unique(data$accepted_name) else
+            names = unique(data$genus)
 
-# input file name
-file = ifelse(species, paste0("species/species.py"), paste0("genus/genus.py")) 
+#Create python file
+cat("#!/usr/bin/env python", "from numpy import * ", "",  sep = "\n",
+    file = file, append = FALSE)
 
-# extract taxon names
-if(species) names = unique(dat.sp$accepted_name) else names = unique(dat.sp$genus)
-
-cat("#!/usr/bin/env python", "from numpy import * ", "",  sep = "\n", file = file, append = FALSE)
-
+#For each age replicate
 for(i in 1:reps){
   
   cat("data_", i, "=[", sep = "", file = file, append = TRUE)
@@ -33,26 +39,32 @@ for(i in 1:reps){
   names_py = c()
   for(j in names){
     
-    if(species)
-      tmp <- dat.sp[which(dat.sp$accepted_name == j),]
-    else 
-      tmp <- dat.sp[which(dat.sp$genus == j),]
+    if(species) tmp <- data[which(data$accepted_name == j),] else 
+                tmp <- data[which(data$genus == j),]
     
-    times <- unlist(lapply(1:dim(tmp)[1], function(x) { runif(1, tmp$min_ma[x], tmp$max_ma[x]) }))
+    times <- unlist(lapply(1:dim(tmp)[1], function(x) { runif(1, tmp$min_ma[x],
+                                                              tmp$max_ma[x]) }))
     
     if(length(times) > 0){
-      data_py = c(data_py, paste0("array([", paste(times, collapse = ","), "])"))
+      data_py = c(data_py,
+                  paste0("array([", paste(times, collapse = ","),"])"))
       names_py = c(names_py, paste0("'", j, "'")) #some redundancy here
     }
   }
   
   # print fossil ages
-  cat(paste(data_py, collapse = ",\n"), "]\n", sep = "\n", file = file, append = TRUE)
+  cat(paste(data_py, collapse = ",\n"), "]\n", sep = "\n", file = file,
+      append = TRUE)
 }
 
-cat("d=[", paste0(paste0("data", "_", 1:reps), collapse = ", "), "]\n", sep = "", file = file, append = TRUE)
-cat("names=[", paste0(paste0("'rep", "_", 1:reps, "'"), collapse = ", ") ,"]\n", sep = "", file = file, append = TRUE)
-cat("def get_data(i): return d[i]", "def get_out_name(i): return  names[i]", sep = "\n", file = file, append = TRUE)
-cat("taxa_names=[", paste(names_py, collapse = ","), "]\n", sep = "", file = file, append = TRUE)
-cat("def get_taxa_names(): return taxa_names", sep = "\n", file = file, append = TRUE)
+cat("d=[", paste0(paste0("data", "_", 1:reps), collapse = ", "), "]\n",
+    sep = "", file = file, append = TRUE)
+cat("names=[", paste0(paste0("'rep", "_", 1:reps, "'"), collapse = ", ") ,"]\n",
+    sep = "", file = file, append = TRUE)
+cat("def get_data(i): return d[i]", "def get_out_name(i): return  names[i]",
+    sep = "\n", file = file, append = TRUE)
+cat("taxa_names=[", paste(names_py, collapse = ","), "]\n", sep = "",
+    file = file, append = TRUE)
+cat("def get_taxa_names(): return taxa_names", sep = "\n", file = file,
+    append = TRUE)
 
