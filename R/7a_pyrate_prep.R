@@ -2,8 +2,8 @@
 #Code to prepare data for input into PyRate
 
 #Set options
-#Choose number of replicates for age uncertainty (50?)
-reps <- 2
+#Choose number of replicates for age uncertainty
+reps <- 50
 #Set species = TRUE for species, species = FALSE for genera
 species <- TRUE
 #Set seed
