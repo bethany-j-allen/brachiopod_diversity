@@ -10,3 +10,4 @@ data/brachiopods_raw.csv
 
 *__pycache__
 *pyrate_mcmc_logs
+*.py
