@@ -41,6 +41,9 @@ fossils <- filter(fossils, accepted_rank %in% c("species", "subspecies"))
 fossils$accepted_name <- gsub("\\s*\\([^\\)]+\\)","",
                               fossils$accepted_name)
 
+#Remove subgenera from genus names (remove string between brackets)
+fossils$genus <- gsub("\\s*\\([^\\)]+\\)","", fossils$genus)
+
 #Remove subspecies from species names (remove third "word")
 fossils$accepted_name <- sub("^(\\S*\\s+\\S+).*", "\\1",
                                         fossils$accepted_name)
