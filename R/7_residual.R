@@ -9,6 +9,14 @@ library(nlme)
 library(paleoTS)
 library(plotrix)
 
+
+#Count formations per stage bin
+formation_counts <- fossils %>%
+  filter(!is.na(formation)) %>%
+  distinct(formation, stage_bin, .keep_all = T) %>%
+  count(stage_bin)
+
+
 #Source code from Graeme Lloyd
 source("http://www.graemetlloyd.com/pubdata/functions_2.r")
 
@@ -40,7 +48,7 @@ proxy <- raw_counts$formations
 #Plot proxy against diversity
 #plot(proxy, div)
 
-#Corrleation test
+#Correlation test
 #cor.test(proxy, div, method = "spearman")
 
 #Run the model code
