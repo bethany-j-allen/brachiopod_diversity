@@ -66,7 +66,7 @@ summary <- left_join(summary, midpoint_data, by = join_by(stages == interval_nam
 #Plot
 ggplot(summary, aes(x = mid_ma, y = mid_val)) +
   geom_ribbon(aes(ymax = max_val, ymin = min_val), alpha = 0.5) +
-  geom_line(linewidth = 1) + scale_x_reverse() +
+  geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = "Ma", y = "Generic diversity") +
   coord_geo(xlim = c(max(summary$max_ma), min(summary$min_ma)),
             pos = as.list(rep("bottom", 2)),

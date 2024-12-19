@@ -36,7 +36,7 @@ summary <- left_join(richness, midpoint_data, by = join_by(interval_name))
 
 #Plot
 ggplot(summary, aes(x = mid_ma, y = n)) +
-  geom_line(linewidth = 1) + scale_x_reverse() +
+  geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = "Ma", y = "Generic diversity") +
   coord_geo(xlim = c(max(summary$max_ma), min(summary$min_ma)),
             pos = as.list(rep("bottom", 2)),

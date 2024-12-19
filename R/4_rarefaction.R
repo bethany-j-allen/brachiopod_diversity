@@ -19,7 +19,6 @@ glimpse(fossils)
 
 #Get (pooled) collection counts per stage
 collection_counts <- fossils %>%
-                     filter(identified_rank == "species") %>%
                      distinct(collection_no_pooled, stage_bin,
                               .keep_all = T) %>%
                      count(stage_bin)
