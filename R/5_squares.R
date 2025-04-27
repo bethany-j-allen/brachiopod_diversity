@@ -62,8 +62,8 @@ for(i in 1:length(sp_stage_freq)) {
 }
 
 #Genera
-for(i in 1:length(gen_stage_freq)) {
-  freq_list <- gen_stage_freq[[i]]
+for(l in 1:length(gen_stage_freq)) {
+  freq_list <- gen_stage_freq[[l]]
   if(is.na(freq_list[1])){freq_list <- 0}
   if(freq_list[1] == 0){squares <- 0} else {
     gen_count <- length(freq_list)
