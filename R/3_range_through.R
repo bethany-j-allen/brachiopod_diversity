@@ -75,15 +75,15 @@ ggplot(gen_summary, aes(x = mid_ma, y = n)) +
             dat = list("stages", "periods"),
             height = list(unit(4, "lines"), unit(2, "line")),
             rot = list(90, 0), size = list(2.5, 5), abbrv = FALSE) +
-  theme_classic() + theme(legend.title=element_blank())
+  theme_classic() + theme(legend.title = element_blank())
 
 #Plot species
 ggplot(sp_summary, aes(x = mid_ma, y = n)) +
   geom_line(linewidth = 2) + scale_x_reverse() +
-  labs(x = "Ma", y = "Generic diversity") +
+  labs(x = "Ma", y = "Species diversity") +
   coord_geo(xlim = c(max(sp_summary$max_ma), min(sp_summary$min_ma)),
             pos = as.list(rep("bottom", 2)),
             dat = list("stages", "periods"),
             height = list(unit(4, "lines"), unit(2, "line")),
             rot = list(90, 0), size = list(2.5, 5), abbrv = FALSE) +
-  theme_classic() + theme(legend.title=element_blank())
+  theme_classic() + theme(legend.title = element_blank())
