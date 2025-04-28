@@ -59,10 +59,12 @@ sp_summary <- left_join(sp_richness, midpoint_data, by = join_by(interval_name))
 
 #Save to counts table
 counts <- read_csv("data/counts.csv")
-colnames(gen_richness) <- c("stage", "rt_genera")
-colnames(sp_richness) <- c("stage", "rt_species")
-counts <- left_join(counts, gen_richness, by = join_by(stage))
-counts <- left_join(counts, sp_richness, by = join_by(stage))
+colnames(gen_richness) <- c("stage", "rt")
+gen_richness$level <- "genera"
+colnames(sp_richness) <- c("stage", "rt")
+sp_richness$level <- "species"
+gen_richness <- rbind(gen_richness, sp_richness)
+test <- left_join(counts, gen_richness, by = c("stage", "level"))
 write_csv(counts, "data/counts.csv")
 
 

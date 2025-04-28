@@ -65,14 +65,13 @@ gen_estD[which(gen_estD$t >= 2 * gen_estD$reference_t),
 
 #Save to counts table
 counts <- read_csv("data/counts.csv")
-summary <- data.frame(stage = gen_estD$Assemblage,
-                       gen_qD = gen_estD$qD,
-                       gen_qD_LCL = gen_estD$qD.LCL,
-                       gen_qD_UCL = gen_estD$qD.UCL,
-                       sp_qD = sp_estD$qD,
-                       sp_qD_LCL = sp_estD$qD.LCL,
-                       sp_qD_UCL = sp_estD$qD.UCL)
-counts <- left_join(counts, summary, by = join_by(stage))
+summary <- data.frame(stage = c(gen_estD$Assemblage, sp_estD$Assemblage),
+                      level = c(rep("genera", nrow(gen_estD)),
+                                rep("species", nrow(gen_estD))),
+                       qD = c(gen_estD$qD, sp_estD$qD),
+                       qD_LCL = c(gen_estD$qD.LCL, sp_estD$qD.LCL),
+                       qD_UCL = c(gen_estD$qD.UCL, sp_estD$qD.UCL))
+counts <- left_join(counts, summary, by = c("stage", "level"))
 write_csv(counts, "data/counts.csv")
 
 

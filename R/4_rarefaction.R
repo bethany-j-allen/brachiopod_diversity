@@ -59,14 +59,15 @@ gen_maxes <- apply(gen_subsampled_richness, 2, max)
 sp_maxes <- apply(sp_subsampled_richness, 2, max)
 gen_mins <- apply(gen_subsampled_richness, 2, min)
 sp_mins <- apply(sp_subsampled_richness, 2, min)
-summary <- data.frame(stage = stages, rf_gen_max = gen_maxes,
-                      rf_gen_median = gen_medians, rf_gen_min = gen_mins,
-                      rf_sp_max = sp_maxes, rf_sp_median = sp_medians,
-                      rf_sp_min = sp_mins)
+gen_summary <- data.frame(stage = stages, level = "genera", rf_max = gen_maxes,
+                      rf_median = gen_medians, rf_min = gen_mins)
+sp_summary <- data.frame(stage = stages, level = "species", rf_max = sp_maxes,
+                         rf_median = sp_medians, rf_min = sp_mins)
+summary <- rbind(gen_summary, sp_summary)
 
 #Save to counts table
 counts <- read_csv("data/counts.csv")
-counts <- left_join(counts, summary, by = join_by(stage))
+counts <- left_join(counts, summary, by = c("stage", "level"))
 write_csv(counts, "data/counts.csv")
 
 

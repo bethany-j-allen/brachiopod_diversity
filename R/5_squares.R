@@ -77,12 +77,14 @@ for(l in 1:length(gen_stage_freq)) {
 }
 
 #Label squares estimates with stages
-summary <- data.frame(stage = stages, gen_squares = gen_squares_list,
-                      sp_squares = sp_squares_list)
+summary <- data.frame(stage = stages,
+                      level = c(rep("genera", length(gen_squares_list)),
+                                rep("species", length(gen_squares_list))),
+                      squares = c(gen_squares_list, sp_squares_list))
 
 #Save to counts table
 counts <- read_csv("data/counts.csv")
-counts <- left_join(counts, summary, by = join_by(stage))
+counts <- left_join(counts, summary, by = c("stage", "level"))
 write_csv(counts, "data/counts.csv")
 
 

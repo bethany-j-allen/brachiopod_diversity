@@ -29,13 +29,17 @@ genus_counts <- fossils %>%
 
 #Bind
 counts <- data.frame(stage = species_counts$stage_bin,
-                     raw_genera = genus_counts$n,
-                     raw_species = species_counts$n)
+                     genera = genus_counts$n,
+                     species = species_counts$n)
 counts <- arrange(counts, factor(stage, levels = stages))
 
 #Add stage midpoints
 midpoint_data <- select(GTS2020, interval_name, max_ma, mid_ma, min_ma)
 counts <- left_join(counts, midpoint_data, by = join_by(stage == interval_name))
+
+#Pivot data
+counts <- pivot_longer(counts, cols = c(genera, species), names_to = "level",
+                     values_to = "raw")
 
 #Save
 write_csv(counts, "data/counts.csv")
