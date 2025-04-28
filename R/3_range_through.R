@@ -64,7 +64,7 @@ gen_richness$level <- "genera"
 colnames(sp_richness) <- c("stage", "rt")
 sp_richness$level <- "species"
 gen_richness <- rbind(gen_richness, sp_richness)
-test <- left_join(counts, gen_richness, by = c("stage", "level"))
+counts <- left_join(counts, gen_richness, by = c("stage", "level"))
 write_csv(counts, "data/counts.csv")
 
 
