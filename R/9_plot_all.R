@@ -18,25 +18,55 @@ stages <- c("Asselian", "Sakmarian", "Artinskian", "Kungurian", "Roadian",
 #Read in dataset
 counts <- read_csv("data/counts.csv")
 
-#Raw plot
-raw <- ggplot(counts, aes(x = mid_ma, y = raw, group = level, col = level)) +
+#Raw species plot
+raw_sp <- ggplot(counts, aes(x = mid_ma, y = raw, group = level, col = level)) +
           geom_line(linewidth = 2) + scale_x_reverse() +
           labs(x = NULL, y = "Raw count") +
+          scale_colour_manual(values = c("grey", "black")) +
           theme_classic() + theme(legend.title = element_blank(),
                                   axis.text.x = element_blank(),
                                   axis.ticks.x = element_blank())
 
-#Range-through plot
-rt <- ggplot(counts, aes(x = mid_ma, y = rt, group = level, col = level)) +
+#Raw genus plot
+raw_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = raw)) +
+  geom_line(linewidth = 2) + scale_x_reverse() +
+  labs(x = NULL, y = "Raw count") +
+  theme_classic() + theme(legend.title = element_blank(),
+                          axis.text.x = element_blank(),
+                          axis.ticks.x = element_blank())
+
+#Range-through species plot
+rt_sp <- ggplot(counts, aes(x = mid_ma, y = rt, group = level, col = level)) +
+  geom_line(linewidth = 2) + scale_x_reverse() +
+  labs(x = NULL, y = "Range-through count") +
+  scale_colour_manual(values = c("grey", "black")) +
+  theme_classic() + theme(legend.title = element_blank(),
+                          axis.text.x = element_blank(),
+                          axis.ticks.x = element_blank())
+
+#Range-through genus plot
+rt_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = rt)) +
   geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = NULL, y = "Range-through count") +
   theme_classic() + theme(legend.title = element_blank(),
                           axis.text.x = element_blank(),
                           axis.ticks.x = element_blank())
 
-#Rarefied plot
-rf <- ggplot(counts, aes(x = mid_ma, y = rf_median, group = level,
+#Rarefied species plot
+rf_sp <- ggplot(counts, aes(x = mid_ma, y = rf_median, group = level,
                             col = level, fill = level)) +
+  geom_ribbon(aes(ymax = rf_max, ymin = rf_min), alpha = 0.5) +
+  geom_line(linewidth = 2) + scale_x_reverse() +
+  labs(x = NULL, y = "Rarefied diversity") +
+  scale_colour_manual(values = c("grey", "black")) +
+  scale_fill_manual(values = c("grey", "black")) +
+  theme_classic() + theme(legend.title = element_blank(),
+                          axis.text.x = element_blank(),
+                          axis.ticks.x = element_blank())
+
+#Rarefied genus plot
+rf_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma,
+                                                        y = rf_median)) +
   geom_ribbon(aes(ymax = rf_max, ymin = rf_min), alpha = 0.5) +
   geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = NULL, y = "Rarefied diversity") +
@@ -44,18 +74,39 @@ rf <- ggplot(counts, aes(x = mid_ma, y = rf_median, group = level,
                           axis.text.x = element_blank(),
                           axis.ticks.x = element_blank())
 
-#Squares plot
-squares <- ggplot(counts, aes(x = mid_ma, y = squares, group = level,
+#Squares species plot
+squares_sp <- ggplot(counts, aes(x = mid_ma, y = squares, group = level,
                               col = level)) +
+  geom_line(linewidth = 2) + scale_x_reverse() +
+  labs(x = NULL, y = "Squares diversity") +
+  scale_colour_manual(values = c("grey", "black")) +
+  theme_classic() + theme(legend.title = element_blank(),
+                          axis.text.x = element_blank(),
+                          axis.ticks.x = element_blank())
+
+#Squares genus plot
+squares_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma,
+                                                             y = squares)) +
   geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = NULL, y = "Squares diversity") +
   theme_classic() + theme(legend.title = element_blank(),
                           axis.text.x = element_blank(),
                           axis.ticks.x = element_blank())
 
-#SQS plot
-sqs <- ggplot(counts, aes(x = mid_ma, y = qD, group = level, col = level,
+#SQS species plot
+sqs_sp <- ggplot(counts, aes(x = mid_ma, y = qD, group = level, col = level,
                           fill = level)) +
+  geom_ribbon(aes(ymax = qD_UCL, ymin = qD_LCL), alpha = 0.5) +
+  geom_line(linewidth = 2) + scale_x_reverse() +
+  labs(x = NULL, y = "SQS diversity") +
+  scale_colour_manual(values = c("grey", "black")) +
+  scale_fill_manual(values = c("grey", "black")) +
+  theme_classic() + theme(legend.title = element_blank(),
+                          axis.text.x = element_blank(),
+                          axis.ticks.x = element_blank())
+
+#SQS genus plot
+sqs_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = qD)) +
   geom_ribbon(aes(ymax = qD_UCL, ymin = qD_LCL), alpha = 0.5) +
   geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = NULL, y = "SQS diversity") +
@@ -64,7 +115,7 @@ sqs <- ggplot(counts, aes(x = mid_ma, y = qD, group = level, col = level,
                           axis.ticks.x = element_blank())
 
 #Create time axis
-axis <- ggplot(counts, aes(x = mid_ma)) +
+axis_sp <- ggplot(counts, aes(x = mid_ma)) +
   scale_x_reverse() + labs(x = NULL) +
   coord_geo(xlim = c(max(counts$max_ma + 3.6), min(counts$min_ma - 8)),
             pos = as.list(rep("bottom", 2)),
@@ -73,10 +124,27 @@ axis <- ggplot(counts, aes(x = mid_ma)) +
             rot = list(90, 0), size = list(2.5, 5), abbrv = FALSE) +
   theme_classic() + theme(legend.title = element_blank())
 
+axis_gen <- ggplot(counts, aes(x = mid_ma)) +
+  scale_x_reverse() + labs(x = NULL) +
+  coord_geo(xlim = c(max(counts$max_ma + 3.4), min(counts$min_ma)),
+            pos = as.list(rep("bottom", 2)),
+            dat = list("stages", "periods"),
+            height = list(unit(4, "lines"), unit(2, "line")),
+            rot = list(90, 0), size = list(2.5, 5), abbrv = FALSE) +
+  theme_classic() + theme(legend.title = element_blank())
+
 #Create and arrange composite plots
-main_plot <- ggarrange(raw, rt, rf, squares, sqs, axis,
+species_plot <- ggarrange(raw_sp, rt_sp, rf_sp, squares_sp, sqs_sp, axis_sp,
                   labels = c("A", "B", "C", "D", "E", NULL),
                   ncol = 1, nrow = 6)
 
+genus_plot <- ggarrange(raw_gen, rt_gen, rf_gen, squares_gen, sqs_gen, axis_gen,
+                          labels = c("A", "B", "C", "D", "E", NULL),
+                          ncol = 1, nrow = 6)
+
 #Save
-ggsave(file = "Figure.pdf", plot = main_plot, width = 25, height = 40, units = "cm")
+ggsave(file = "Species_figure.pdf", plot = species_plot, width = 25,
+       height = 40, units = "cm")
+
+ggsave(file = "Genus_figure.pdf", plot = genus_plot, width = 25,
+       height = 40, units = "cm")
