@@ -22,24 +22,7 @@ formation_counts <- fossils %>%
 colnames(formation_counts) <- c("stage", "formations")
 
 #Source code from Graeme Lloyd
-source("http://www.graemetlloyd.com/pubdata/functions_2.r")
-
-#run this bit of code as well
-#(one of the functions in sourced code is incompatible with current R versions)
-akaike.wts<- function(aa)
-{
-  okset<- !is.na(aa)
-  aas<- aa[okset]
-
-  ma<- min(aas)
-  delt<- aas - ma
-  denom<- sum(exp(-delt/2))
-  ww<- exp(-delt/2)/denom
-  names(ww)<- names(aa)
-
-  aw<- ww[okset]
-  return(aw)
-}
+source("R/Lloyd_RM_code.R")
 
 #Load data
 counts <- read.csv("data/counts.csv")
@@ -52,13 +35,6 @@ input_data <- left_join(input_data, formation_counts, by = "stage")
 genera <- filter(input_data, level == "genera")
 species <- filter(input_data, level == "species")
 
-time <- raw_counts$mid_ma
-div <- raw_counts$raw_species
-proxy <- formations
-
-#Plot proxy against diversity
-#plot(proxy, div)
-
 #Correlation tests
 cor.test(genera$formations, genera$raw, method = "spearman")
 cor.test(species$formations, species$raw, method = "spearman")
@@ -67,12 +43,24 @@ cor.test(species$formations, species$raw, method = "spearman")
 gen_results <- rockmodel.predictCI(genera$formations, genera$raw)
 sp_results <- rockmodel.predictCI(species$formations, species$raw)
 
-#Save to counts table
-counts$RM_predicted <- c(rbind(gen_results$predicted, sp_results$predicted))
-counts$RM_selower <- c(rbind(gen_results$selowerCI, sp_results$selowerCI))
-counts$RM_seupper <- c(rbind(gen_results$seupperCI, sp_results$seupperCI))
-counts$RM_sdlower <- c(rbind(gen_results$sdlowerCI, sp_results$sdlowerCI))
-counts$RM_sdupper <- c(rbind(gen_results$sdupperCI, sp_results$sdupperCI))
+#Exploratory plots
+plot(genera$formations, genera$raw)
+lines(genera$formations, predict(gen_results$model, list(x=genera$formations)))
+plot(species$formations, species$raw)
+lines(species$formations, predict(sp_results$model, list(x=species$formations)))
+
+#Convert predictions to residuals
+gen_resid <- genera$raw - gen_results$predicted
+sp_resid <- species$raw - sp_results$predicted
+gen_sdlower <- genera$raw - gen_results$sdlowerCI
+sp_sdlower <- species$raw - sp_results$sdlowerCI
+gen_sdupper <- genera$raw - gen_results$sdupperCI
+sp_sdupper <- species$raw - sp_results$sdupperCI
+
+#Save to counts table (Graeme recommends standard deviation)
+counts$RM_resid <- c(rbind(gen_resid, sp_resid))
+counts$RM_sdlower <- c(rbind(gen_sdlower, sp_sdlower))
+counts$RM_sdupper <- c(rbind(gen_sdupper, sp_sdupper))
 write_csv(counts, "data/counts.csv")
 
 #Plot sampled and modelled diversity
