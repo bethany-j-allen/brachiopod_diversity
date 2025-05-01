@@ -1,33 +1,12 @@
-#Fixing residuals
+#Code from Lloyd (2012) A refined modelling approach to assess the influence of
+#sampling on palaeobiodiversity curves: new support for declining Cretaceous
+#dinosaur richness, Biology Letters, 8, 123-126.
 
 #Load packages
 library(nlme)
 library(paleoTS)
 library(plotrix)
 library(earth)
-
-#diversitymeasure<-c(212, 236, 299, 366, 326, 330, 266, 277, 236, 33, 27, 95, 62)
-#diversitymeasure<-c(0,0,0,0,0,1,1,1,2,9,
-#       9,9,5,5,5,11,11,11,10,10,
-#       10,12,12,12,8,9,8,5,5,5,
-#       7,7,8,12,12,15,15,15,15,9,
-#       9,9,37,37,38,31,30,30,3,3,
-#       3,5,5,5,4,4,5,7,6,6,
-#       7,9,10,14,12,13,8,6,7,5,
-#       2,2,3,3,3,4,4,4,9,11,
-#       10,13,13,14)
-
-
-#rockmeasure<-c(61, 103, 107, 100, 82, 90, 62, 94, 60, 22, 18, 53, 24)
-#rockmeasure<-c(1,1,1,2,2,3,11,9,10,15,
-#         13,15,7,7,7,44,39,40,36,37,
-#         39,27,27,27,23,23,22,15,14,15,
-#         19,19,22,32,32,32,26,26,26,46,
-#         54,61,60,54,66,65,61,70,85,83,
-#         86,88,85,85,93,93,98,90,82,91,
-#         103,98,113,119,113,120,113,101,102,80,
-#         80,80,85,84,87,85,81,91,134,115,
-#         150,159,133,175)
 
 AICc<-function(model,n)
 {
