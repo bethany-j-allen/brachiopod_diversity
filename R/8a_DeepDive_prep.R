@@ -68,3 +68,44 @@ prep_dd_input(
   # Specify name of created file
   output_file = "data/brachiopod_deepdive_input.csv"
 )
+
+# Create config file
+config <- create_config(
+  # Specify the name for the simulations
+  name = "brachiopod",
+  # Specify the name of the data file
+  data_file = "brachiopods_deepdive_input.csv",
+  # Specify vector containing time bin boundaries
+  bins = bins,
+  # Specify the number of geographic regions to simulate
+  n_regions = length(unique(brach_data$Region))
+)
+
+# Change working directory
+edit_config(config = config,
+            module = "general",
+            parameter = "wd",
+            value = "brachiopods_deepdive_input.csv")
+
+# Make origin older
+edit_config(config = config,
+            module = "simulations",
+            parameter = "root_r",
+            value = "538 487")
+
+# Reduce reps to check functionality
+edit_config(config = config,
+            module = "simulations",
+            parameter = "n_training_simulations",
+            value = 100)
+edit_config(config = config,
+            module = "simulations",
+            parameter = "n_test_simulations",
+            value = 10)
+edit_config(config = config,
+            module = "empirical_predictions",
+            parameter = "replicates",
+            value = 5)
+
+# Write the configuration file
+config$write("data/brachiopod_config.ini")
