@@ -4,7 +4,7 @@
 #setwd("#####")
 
 #Load packages
-library(remotes)
+#library(remotes)
 #remotes::install_github("DeepDive-project/DeepDiveR")
 library(DeepDiveR)
 library(palaeoverse)
@@ -138,6 +138,12 @@ config <- create_config(
   # Specify the number of geographic regions to simulate
   n_regions = length(unique(brach_data$Region))
 )
+
+# [Bug in DeepDive(R)] Convert extant_sp from NA to 1
+edit_config(config = config,
+            module = "simulations",
+            parameter = "extant_sp",
+            value = 1)
 
 # Change working directory
 edit_config(config = config,
