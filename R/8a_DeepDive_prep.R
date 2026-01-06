@@ -132,7 +132,7 @@ config <- create_config(
   # Specify the name for the simulations
   name = "brachiopod",
   # Specify the name of the data file
-  data_file = "brachiopods_deepdive_input.csv",
+  data_file = "brachiopod_deepdive_input.csv",
   # Specify vector containing time bin boundaries
   bins = bins,
   # Specify the number of geographic regions to simulate
@@ -143,7 +143,7 @@ config <- create_config(
 edit_config(config = config,
             module = "general",
             parameter = "wd",
-            value = "brachiopods_deepdive_input.csv")
+            value = "inputs")
 
 # Make origin older
 edit_config(config = config,
