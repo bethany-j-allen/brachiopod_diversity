@@ -115,7 +115,7 @@ min(brach_data$MinAge)
 bins <- c(298.9, 293.52, 290.1, 283.3, 274.4, 266.9, 264.28, 259.51, 254.14,
           251.90, 249.9, 246.7, 241.46, 237)
 
-# Recalibrate time intervals (end of Carnian becomes "present")
+# Recalibrate time intervals (end of Ladinian becomes "present")
 brach_data$MinAge <- round(brach_data$MinAge - 237, digits = 3)
 brach_data$MaxAge <- round(brach_data$MaxAge - 237, digits = 3)
 bins <- round(bins - 237, digits = 3)
@@ -144,11 +144,16 @@ config <- create_config(
   n_regions = length(unique(brach_data$Region))
 )
 
-# [Bug in DeepDive(R)] Convert extant_sp from NA to 1
+# Check parameter table for descriptions and defaults
+View(parameters)
+
+# [Bug in DeepDive(R)] Convert extant_sp from NA to "1 1000"
+# [Default in parameter table is "0 10000" but with 0 will not run, and with
+# 10000 we get numerical overflow]
 edit_config(config = config,
             module = "simulations",
             parameter = "extant_sp",
-            value = 1)
+            value = "1 1000")
 
 # Change working directory
 edit_config(config = config,
@@ -156,7 +161,7 @@ edit_config(config = config,
             parameter = "wd",
             value = "inputs")
 
-# Make origin older
+# Set origin of clade to Cambrian
 538 - 237
 487 - 237
 edit_config(config = config,
@@ -168,15 +173,15 @@ edit_config(config = config,
 edit_config(config = config,
             module = "simulations",
             parameter = "n_training_simulations",
-            value = 12)
+            value = 6)
 edit_config(config = config,
             module = "simulations",
             parameter = "n_test_simulations",
-            value = 5)
+            value = 6)
 edit_config(config = config,
             module = "empirical_predictions",
             parameter = "replicates",
-            value = 5)
+            value = 6)
 
 # Write the configuration file
 config$write("data/brachiopod_config.ini")
