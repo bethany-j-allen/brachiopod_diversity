@@ -115,6 +115,11 @@ min(brach_data$MinAge)
 bins <- c(298.9, 293.52, 290.1, 283.3, 274.4, 266.9, 264.28, 259.51, 254.14,
           251.90, 249.9, 246.7, 241.46, 237)
 
+# Recalibrate time intervals (end of Carnian becomes "present")
+brach_data$MinAge <- round(brach_data$MinAge - 237, digits = 3)
+brach_data$MaxAge <- round(brach_data$MaxAge - 237, digits = 3)
+bins <- round(bins - 237, digits = 3)
+
 # Create input file for DeepDive (one rep for test)
 prep_dd_input(
   # Specify occurrence data.frame
@@ -152,20 +157,22 @@ edit_config(config = config,
             value = "inputs")
 
 # Make origin older
+538 - 237
+487 - 237
 edit_config(config = config,
             module = "simulations",
             parameter = "root_r",
-            value = "538 487")
+            value = "301 250")
 
 # Reduce reps to check functionality
 edit_config(config = config,
             module = "simulations",
             parameter = "n_training_simulations",
-            value = 100)
+            value = 12)
 edit_config(config = config,
             module = "simulations",
             parameter = "n_test_simulations",
-            value = 10)
+            value = 5)
 edit_config(config = config,
             module = "empirical_predictions",
             parameter = "replicates",
