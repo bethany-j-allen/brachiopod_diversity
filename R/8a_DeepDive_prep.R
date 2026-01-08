@@ -94,54 +94,83 @@ ggplot(fossils, aes(x = p_lng, y = p_lat, group = realm, col = realm)) +
   ylim(-90, 90) +
   theme_classic()
 
-##Create DeepDive input files
+##Create DeepDive input files (species resolution)
 # Create dataframe
-brach_data <- data.frame(Taxon = fossils$accepted_name,
-                         Region = fossils$realm,
-                         MinAge = fossils$min_ma,
-                         MaxAge = fossils$max_ma,
-                         Locality = fossils$collection_no)
+brach_data_sp <- data.frame(Taxon = fossils$accepted_name,
+                            Region = fossils$realm,
+                            MinAge = fossils$min_ma,
+                            MaxAge = fossils$max_ma,
+                            Locality = fossils$collection_no)
 
 # Check for NAs
-NA %in% brach_data
+NA %in% brach_data_sp
 
 # Check oldest possible maximum fossil age
-max(brach_data$MaxAge)
+max(brach_data_sp$MaxAge)
 
 # Check youngest possible minumum fossil age
-min(brach_data$MinAge)
+min(brach_data_sp$MinAge)
 
 # Describe vector of bin boundaries - stages from Asselian to Carnian
 bins <- c(298.9, 293.52, 290.1, 283.3, 274.4, 266.9, 264.28, 259.51, 254.14,
           251.90, 249.9, 246.7, 241.46, 237)
 
 # Recalibrate time intervals (end of Ladinian becomes "present")
-brach_data$MinAge <- round(brach_data$MinAge - 237, digits = 3)
-brach_data$MaxAge <- round(brach_data$MaxAge - 237, digits = 3)
+brach_data_sp$MinAge <- round(brach_data_sp$MinAge - 237, digits = 3)
+brach_data_sp$MaxAge <- round(brach_data_sp$MaxAge - 237, digits = 3)
 bins <- round(bins - 237, digits = 3)
 
 # Create input file for DeepDive (one rep for test)
 prep_dd_input(
   # Specify occurrence data.frame
-  dat = brach_data,
+  dat = brach_data_sp,
   # Specify vector containing time bin boundaries
   bins = bins,
   # Specify number of replicates
   r = 1,
   # Specify name of created file
-  output_file = "data/brachiopod_deepdive_input.csv"
+  output_file = "data/brachiopod_deepdive_input_sp.csv"
 )
 
-# Create config file
+##Create DeepDive input files (genus resolution)
+genus_filter <- distinct(fossils, collection_no, genus, .keep_all = T)
+
+# Create dataframe
+brach_data_gen <- data.frame(Taxon = genus_filter$accepted_name,
+                            Region = genus_filter$realm,
+                            MinAge = genus_filter$min_ma,
+                            MaxAge = genus_filter$max_ma,
+                            Locality = genus_filter$collection_no)
+
+# Check for NAs
+NA %in% brach_data_gen
+
+# Recalibrate time intervals (end of Ladinian becomes "present")
+brach_data_gen$MinAge <- round(brach_data_gen$MinAge - 237, digits = 3)
+brach_data_gen$MaxAge <- round(brach_data_gen$MaxAge - 237, digits = 3)
+
+# Create input file for DeepDive (one rep for test)
+prep_dd_input(
+  # Specify occurrence data.frame
+  dat = brach_data_gen,
+  # Specify vector containing time bin boundaries
+  bins = bins,
+  # Specify number of replicates
+  r = 1,
+  # Specify name of created file
+  output_file = "data/brachiopod_deepdive_input_gen.csv"
+)
+
+##Create config files
 config <- create_config(
   # Specify the name for the simulations
   name = "brachiopod",
   # Specify the name of the data file
-  data_file = "brachiopod_deepdive_input.csv",
+  data_file = "brachiopod_deepdive_input_sp.csv",
   # Specify vector containing time bin boundaries
   bins = bins,
   # Specify the number of geographic regions to simulate
-  n_regions = length(unique(brach_data$Region))
+  n_regions = length(unique(brach_data_sp$Region))
 )
 
 # Check parameter table for descriptions and defaults
@@ -183,5 +212,12 @@ edit_config(config = config,
             parameter = "replicates",
             value = 6)
 
-# Write the configuration file
-config$write("data/brachiopod_config.ini")
+# Write the configuration files
+config$write("data/brachiopod_config_sp.ini")
+
+edit_config(config = config,
+            module = "empirical_predictions",
+            parameter = "empirical_input_file",
+            value = "brachiopod_deepdive_input_gen.csv")
+
+config$write("data/brachiopod_config_gen.ini")
