@@ -120,14 +120,14 @@ brach_data_sp$MinAge <- round(brach_data_sp$MinAge - 237, digits = 3)
 brach_data_sp$MaxAge <- round(brach_data_sp$MaxAge - 237, digits = 3)
 bins <- round(bins - 237, digits = 3)
 
-# Create input file for DeepDive (one rep for test)
+# Create input file for DeepDive
 prep_dd_input(
   # Specify occurrence data.frame
   dat = brach_data_sp,
   # Specify vector containing time bin boundaries
   bins = bins,
   # Specify number of replicates
-  r = 1,
+  r = 20,
   # Specify name of created file
   output_file = "data/brachiopod_deepdive_input_sp.csv"
 )
@@ -149,14 +149,14 @@ NA %in% brach_data_gen
 brach_data_gen$MinAge <- round(brach_data_gen$MinAge - 237, digits = 3)
 brach_data_gen$MaxAge <- round(brach_data_gen$MaxAge - 237, digits = 3)
 
-# Create input file for DeepDive (one rep for test)
+# Create input file for DeepDive
 prep_dd_input(
   # Specify occurrence data.frame
   dat = brach_data_gen,
   # Specify vector containing time bin boundaries
   bins = bins,
   # Specify number of replicates
-  r = 1,
+  r = 20,
   # Specify name of created file
   output_file = "data/brachiopod_deepdive_input_gen.csv"
 )
@@ -184,12 +184,6 @@ edit_config(config = config,
             parameter = "extant_sp",
             value = "1 1000")
 
-# Change working directory
-edit_config(config = config,
-            module = "general",
-            parameter = "wd",
-            value = "inputs")
-
 # Set origin of clade to Cambrian
 538 - 237
 487 - 237
@@ -198,19 +192,11 @@ edit_config(config = config,
             parameter = "root_r",
             value = "301 250")
 
-# Reduce reps to check functionality
+# Sample rates from loguniform distribution
 edit_config(config = config,
             module = "simulations",
-            parameter = "n_training_simulations",
-            value = 6)
-edit_config(config = config,
-            module = "simulations",
-            parameter = "n_test_simulations",
-            value = 6)
-edit_config(config = config,
-            module = "empirical_predictions",
-            parameter = "replicates",
-            value = 6)
+            parameter = "log_uniform_rates",
+            value = TRUE)
 
 # Write the configuration files
 config$write("data/brachiopod_config_sp.ini")
