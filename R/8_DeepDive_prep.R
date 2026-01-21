@@ -198,6 +198,12 @@ edit_config(config = config,
             parameter = "log_uniform_rates",
             value = TRUE)
 
+# Specify 20 replicates
+edit_config(config = config,
+            module = "empirical_predictions",
+            parameter = "replicates",
+            value = 20)
+
 # Write the configuration files
 config$write("data/brachiopod_config_sp.ini")
 
