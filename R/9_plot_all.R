@@ -139,6 +139,27 @@ rm_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma,
                           axis.text.x = element_blank(),
                           axis.ticks.x = element_blank())
 
+#DeepDive species plot
+DD_sp <- ggplot(counts, aes(x = mid_ma, y = DD_median, group = level, col = level,
+                             fill = level)) +
+  geom_ribbon(aes(ymax = DD_max, ymin = DD_min), alpha = 0.5) +
+  geom_line(linewidth = 2) + scale_x_reverse() +
+  labs(x = NULL, y = "DeepDive diversity estimate") +
+  scale_colour_manual(values = c("grey", "black")) +
+  scale_fill_manual(values = c("grey", "black")) +
+  theme_classic() + theme(legend.title = element_blank(),
+                          axis.text.x = element_blank(),
+                          axis.ticks.x = element_blank())
+
+#DeepDive genus plot
+DD_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = DD_median)) +
+  geom_ribbon(aes(ymax = DD_max, ymin = DD_min), alpha = 0.5) +
+  geom_line(linewidth = 2) + scale_x_reverse() +
+  labs(x = NULL, y = "DeepDive diversity estimate") +
+  theme_classic() + theme(legend.title = element_blank(),
+                          axis.text.x = element_blank(),
+                          axis.ticks.x = element_blank())
+
 #Create time axis
 axis_sp <- ggplot(counts, aes(x = mid_ma)) +
   scale_x_reverse() + labs(x = NULL) +
@@ -160,18 +181,20 @@ axis_gen <- ggplot(counts, aes(x = mid_ma)) +
 
 #Create and arrange composite plots
 species_plot <- ggarrange(raw_sp, rt_sp, rf_sp, squares_sp, sqs_sp, rm_sp,
-                          axis_sp,
-                  labels = c("A", "B", "C", "D", "E", "F", NULL),
-                  ncol = 1, nrow = 7, heights = c(1, 1, 1, 1, 1, 1, 0.6))
+                          DD_sp, axis_sp,
+                  labels = c("A", "B", "C", "D", "E", "F", "G", NULL),
+                  ncol = 1, nrow = 8,
+                  heights = c(1, 1, 1, 1, 1, 1, 1, 0.6))
 
 genus_plot <- ggarrange(raw_gen, rt_gen, rf_gen, squares_gen, sqs_gen, rm_gen,
-                        axis_gen,
-                          labels = c("A", "B", "C", "D", "E", "F", NULL),
-                          ncol = 1, nrow = 7, heights = c(1, 1, 1, 1, 1, 1, 0.6))
+                        DD_gen, axis_gen,
+                  labels = c("A", "B", "C", "D", "E", "F", "G", NULL),
+                  ncol = 1, nrow = 8,
+                  heights = c(1, 1, 1, 1, 1, 1, 1, 0.6))
 
 #Save
 ggsave(file = "Species_figure.pdf", plot = species_plot, width = 25,
-       height = 40, units = "cm")
+       height = 50, units = "cm")
 
 ggsave(file = "Genus_figure.pdf", plot = genus_plot, width = 25,
-       height = 40, units = "cm")
+       height = 50, units = "cm")
