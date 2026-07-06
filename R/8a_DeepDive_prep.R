@@ -87,12 +87,16 @@ for (i in (1:nrow(fossils))) {
 }
 
 #Plot localities by their palaeogeographic realms
-ggplot(fossils, aes(x = p_lng, y = p_lat, group = realm, col = realm)) +
+realms <- ggplot(fossils, aes(x = p_lng, y = p_lat, group = realm,
+                              col = realm)) +
   geom_point() +
-  scale_colour_viridis(discrete = T)+
+  scale_colour_viridis(discrete = T) +
   xlim(-180, 180) +
   ylim(-90, 90) +
   theme_classic()
+
+ggsave(file = "DeepDive_inputs/Brachiopod_realms.pdf", plot = realms,
+       width = 25, height = 15, units = "cm")
 
 ##Create DeepDive input files (species resolution)
 # Create dataframe
