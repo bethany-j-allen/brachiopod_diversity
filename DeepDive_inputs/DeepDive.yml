@@ -1,0 +1,14 @@
+name: DeepDive
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pandas
+  - numpy
+  - scipy
+  - configparser
+  - matplotlib
+  - jupyterlab=3
+  - pip
+  - pip:
+      - git+https://github.com/DeepDive-project/deepdive@v.1.0
