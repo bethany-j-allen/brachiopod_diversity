@@ -21,6 +21,7 @@ counts <- read_csv("data/counts.csv")
 #Raw species plot
 raw_sp <- ggplot(counts, aes(x = mid_ma, y = raw, group = level, col = level)) +
           geom_line(linewidth = 2) + scale_x_reverse() +
+          geom_vline(xintercept = c(273.01, 259.51, 251.902, 247.20, 237.00)) +
           labs(x = NULL, y = "Raw count") +
           scale_colour_manual(values = c("grey", "black")) +
           theme_classic() + theme(legend.title = element_blank(),
