@@ -45,7 +45,7 @@ counts <- pivot_longer(counts, cols = c(genera, species), names_to = "level",
 write_csv(counts, "data/counts.csv")
 
 #Plot species
-ggplot(counts, aes(x = mid_ma, y = raw_species)) +
+ggplot(filter(counts, level == "species"), aes(x = mid_ma, y = raw)) +
   geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = "Ma", y = "Raw species count") +
   coord_geo(xlim = c(max(counts$max_ma), min(counts$min_ma)),
@@ -56,7 +56,7 @@ ggplot(counts, aes(x = mid_ma, y = raw_species)) +
   theme_classic() + theme(legend.title = element_blank())
 
 #Plot genera
-ggplot(counts, aes(x = mid_ma, y = raw_genera)) +
+ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = raw)) +
   geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = "Ma", y = "Raw genus count") +
   coord_geo(xlim = c(max(counts$max_ma), min(counts$min_ma)),
