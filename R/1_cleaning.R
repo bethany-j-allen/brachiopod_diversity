@@ -17,7 +17,7 @@ substages <- c("Griesbachian", "Dienerian", "Smithian", "Spathian", "Aegean",
 
 
 #Read in dataset
-fossils <- read_csv("data/brachiopods_raw.csv", skip = 21)
+fossils <- read_csv("data/brachiopods_raw.csv", skip = 22)
 glimpse(fossils)
 
 #Filter to fossils originally identified to the species level
