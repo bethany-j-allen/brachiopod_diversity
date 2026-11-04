@@ -76,8 +76,8 @@ midpoint_data <- select(GTS2020, interval_name, max_ma, mid_ma, min_ma)
 summary <- left_join(summary, midpoint_data, by = join_by(stage == interval_name))
 
 #Plot genera
-ggplot(summary, aes(x = mid_ma, y = rf_gen_median)) +
-  geom_ribbon(aes(ymax = rf_gen_max, ymin = rf_gen_min), alpha = 0.5) +
+ggplot(filter(summary, level == "genera"), aes(x = mid_ma, y = rf_median)) +
+  geom_ribbon(aes(ymax = rf_max, ymin = rf_min), alpha = 0.5) +
   geom_line(linewidth = 2) +
   scale_x_reverse() +
   labs(x = "Ma", y = "Rarefied generic diversity") +
@@ -89,8 +89,8 @@ ggplot(summary, aes(x = mid_ma, y = rf_gen_median)) +
   theme_classic() + theme(legend.title = element_blank())
 
 #Plot species
-ggplot(summary, aes(x = mid_ma, y = rf_sp_median)) +
-  geom_ribbon(aes(ymax = rf_sp_max, ymin = rf_sp_min), alpha = 0.5) +
+ggplot(filter(summary, level == "species"), aes(x = mid_ma, y = rf_median)) +
+  geom_ribbon(aes(ymax = rf_max, ymin = rf_min), alpha = 0.5) +
   geom_line(linewidth = 2) +
   scale_x_reverse() +
   labs(x = "Ma", y = "Rarefied species diversity") +
