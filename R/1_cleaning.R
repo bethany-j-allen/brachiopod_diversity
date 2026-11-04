@@ -101,3 +101,8 @@ count(fossils, stage_bin)
 
 #Save cleaned dataset
 write.csv(fossils, "data/brachiopods_clean.csv", row.names = F)
+
+#Generate list of enterers for acknowledgement
+enterers <- count(fossils, enterer, sort = TRUE)
+enterers <- mutate(enterers, percentage = n / sum(n))
+write.csv(enterers, "data/PBDB_enterers.csv", row.names = F)
