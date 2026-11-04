@@ -9,6 +9,7 @@ library(deeptime)
 library(gridExtra)
 library(ggpubr)
 library(ggthemes)
+library(palaeoverse)
 
 #Create a vector giving the chronological order of stages
 stages <- c("Asselian", "Sakmarian", "Artinskian", "Kungurian", "Roadian",
@@ -20,16 +21,25 @@ counts <- read_csv("data/counts.csv")
 
 #Raw species plot
 raw_sp <- ggplot(counts, aes(x = mid_ma, y = raw, group = level, col = level)) +
+          annotate(geom = "rect",
+                   xmin = c(293.52, 283.5, 268.8, 259.1, 251.9, 247.2),
+                   xmax = c(290.1, 272.95, 265.1, 254.14, 251.2, 242),
+                   ymin = -Inf, ymax = Inf,
+                   colour = "grey", alpha = 0.2, linewidth = 0)  +
           geom_line(linewidth = 2) + scale_x_reverse() +
-          geom_vline(xintercept = c(273.01, 259.51, 251.902, 247.20, 237.00)) +
           labs(x = NULL, y = "Raw count") +
-          scale_colour_manual(values = c("grey", "black")) +
+          scale_colour_manual(values = c("darkgrey", "black")) +
           theme_classic() + theme(legend.title = element_blank(),
                                   axis.text.x = element_blank(),
                                   axis.ticks.x = element_blank())
 
 #Raw genus plot
 raw_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = raw)) +
+  annotate(geom = "rect",
+           xmin = c(293.52, 283.5, 268.8, 259.1, 251.9, 247.2),
+           xmax = c(290.1, 272.95, 265.1, 254.14, 251.2, 242),
+           ymin = -Inf, ymax = Inf,
+           colour = "grey", alpha = 0.2, linewidth = 0)  +
   geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = NULL, y = "Raw count") +
   theme_classic() + theme(legend.title = element_blank(),
@@ -38,15 +48,25 @@ raw_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = raw)) +
 
 #Range-through species plot
 rt_sp <- ggplot(counts, aes(x = mid_ma, y = rt, group = level, col = level)) +
+  annotate(geom = "rect",
+           xmin = c(293.52, 283.5, 268.8, 259.1, 251.9, 247.2),
+           xmax = c(290.1, 272.95, 265.1, 254.14, 251.2, 242),
+           ymin = -Inf, ymax = Inf,
+           colour = "grey", alpha = 0.2, linewidth = 0)  +
   geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = NULL, y = "Range-through count") +
-  scale_colour_manual(values = c("grey", "black")) +
+  scale_colour_manual(values = c("darkgrey", "black")) +
   theme_classic() + theme(legend.title = element_blank(),
                           axis.text.x = element_blank(),
                           axis.ticks.x = element_blank())
 
 #Range-through genus plot
 rt_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = rt)) +
+  annotate(geom = "rect",
+           xmin = c(293.52, 283.5, 268.8, 259.1, 251.9, 247.2),
+           xmax = c(290.1, 272.95, 265.1, 254.14, 251.2, 242),
+           ymin = -Inf, ymax = Inf,
+           colour = "grey", alpha = 0.2, linewidth = 0)  +
   geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = NULL, y = "Range-through count") +
   theme_classic() + theme(legend.title = element_blank(),
@@ -56,11 +76,16 @@ rt_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = rt)) +
 #Rarefied species plot
 rf_sp <- ggplot(counts, aes(x = mid_ma, y = rf_median, group = level,
                             col = level, fill = level)) +
+  annotate(geom = "rect",
+           xmin = c(293.52, 283.5, 268.8, 259.1, 251.9, 247.2),
+           xmax = c(290.1, 272.95, 265.1, 254.14, 251.2, 242),
+           ymin = -Inf, ymax = Inf,
+           colour = "grey", alpha = 0.2, linewidth = 0)  +
   geom_ribbon(aes(ymax = rf_max, ymin = rf_min), alpha = 0.5) +
   geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = NULL, y = "Rarefied diversity") +
-  scale_colour_manual(values = c("grey", "black")) +
-  scale_fill_manual(values = c("grey", "black")) +
+  scale_colour_manual(values = c("darkgrey", "black")) +
+  scale_fill_manual(values = c("darkgrey", "black")) +
   theme_classic() + theme(legend.title = element_blank(),
                           axis.text.x = element_blank(),
                           axis.ticks.x = element_blank())
@@ -68,6 +93,11 @@ rf_sp <- ggplot(counts, aes(x = mid_ma, y = rf_median, group = level,
 #Rarefied genus plot
 rf_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma,
                                                         y = rf_median)) +
+  annotate(geom = "rect",
+           xmin = c(293.52, 283.5, 268.8, 259.1, 251.9, 247.2),
+           xmax = c(290.1, 272.95, 265.1, 254.14, 251.2, 242),
+           ymin = -Inf, ymax = Inf,
+           colour = "grey", alpha = 0.2, linewidth = 0)  +
   geom_ribbon(aes(ymax = rf_max, ymin = rf_min), alpha = 0.5) +
   geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = NULL, y = "Rarefied diversity") +
@@ -75,39 +105,30 @@ rf_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma,
                           axis.text.x = element_blank(),
                           axis.ticks.x = element_blank())
 
-#Squares species plot
-squares_sp <- ggplot(counts, aes(x = mid_ma, y = squares, group = level,
-                              col = level)) +
-  geom_line(linewidth = 2) + scale_x_reverse() +
-  labs(x = NULL, y = "Squares diversity") +
-  scale_colour_manual(values = c("grey", "black")) +
-  theme_classic() + theme(legend.title = element_blank(),
-                          axis.text.x = element_blank(),
-                          axis.ticks.x = element_blank())
-
-#Squares genus plot
-squares_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma,
-                                                             y = squares)) +
-  geom_line(linewidth = 2) + scale_x_reverse() +
-  labs(x = NULL, y = "Squares diversity") +
-  theme_classic() + theme(legend.title = element_blank(),
-                          axis.text.x = element_blank(),
-                          axis.ticks.x = element_blank())
-
 #SQS species plot
 sqs_sp <- ggplot(counts, aes(x = mid_ma, y = qD, group = level, col = level,
                           fill = level)) +
+  annotate(geom = "rect",
+           xmin = c(293.52, 283.5, 268.8, 259.1, 251.9, 247.2),
+           xmax = c(290.1, 272.95, 265.1, 254.14, 251.2, 242),
+           ymin = -Inf, ymax = Inf,
+           colour = "grey", alpha = 0.2, linewidth = 0)  +
   geom_ribbon(aes(ymax = qD_UCL, ymin = qD_LCL), alpha = 0.5) +
   geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = NULL, y = "Coverage-based diversity estimate") +
-  scale_colour_manual(values = c("grey", "black")) +
-  scale_fill_manual(values = c("grey", "black")) +
+  scale_colour_manual(values = c("darkgrey", "black")) +
+  scale_fill_manual(values = c("darkgrey", "black")) +
   theme_classic() + theme(legend.title = element_blank(),
                           axis.text.x = element_blank(),
                           axis.ticks.x = element_blank())
 
 #SQS genus plot
 sqs_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = qD)) +
+  annotate(geom = "rect",
+           xmin = c(293.52, 283.5, 268.8, 259.1, 251.9, 247.2),
+           xmax = c(290.1, 272.95, 265.1, 254.14, 251.2, 242),
+           ymin = -Inf, ymax = Inf,
+           colour = "grey", alpha = 0.2, linewidth = 0)  +
   geom_ribbon(aes(ymax = qD_UCL, ymin = qD_LCL), alpha = 0.5) +
   geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = NULL, y = "Coverage-based diversity estimate") +
@@ -118,11 +139,16 @@ sqs_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = qD)) +
 #Residual modelling species plot
 rm_sp <- ggplot(counts, aes(x = mid_ma, y = RM_resid, group = level,
                             col = level)) +
+  annotate(geom = "rect",
+           xmin = c(293.52, 283.5, 268.8, 259.1, 251.9, 247.2),
+           xmax = c(290.1, 272.95, 265.1, 254.14, 251.2, 242),
+           ymin = -Inf, ymax = Inf,
+           colour = "grey", alpha = 0.2, linewidth = 0)  +
   geom_ribbon(aes(ymax = RM_sdupper, ymin = RM_sdlower), alpha = 0.5) +
   geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = NULL, y = "Model detrended diversity") +
-  scale_colour_manual(values = c("grey", "black")) +
-  scale_fill_manual(values = c("grey", "black")) +
+  scale_colour_manual(values = c("darkgrey", "black")) +
+  scale_fill_manual(values = c("darkgrey", "black")) +
   geom_hline(yintercept = 0) +
   theme_classic() + theme(legend.title = element_blank(),
                           axis.text.x = element_blank(),
@@ -132,6 +158,11 @@ rm_sp <- ggplot(counts, aes(x = mid_ma, y = RM_resid, group = level,
 #Residual modelling genus plot
 rm_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma,
                                                          y = RM_resid)) +
+  annotate(geom = "rect",
+           xmin = c(293.52, 283.5, 268.8, 259.1, 251.9, 247.2),
+           xmax = c(290.1, 272.95, 265.1, 254.14, 251.2, 242),
+           ymin = -Inf, ymax = Inf,
+           colour = "grey", alpha = 0.2, linewidth = 0)  +
   geom_ribbon(aes(ymax = RM_sdupper, ymin = RM_sdlower), alpha = 0.5) +
   geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = NULL, y = "Model detrended diversity") +
@@ -143,17 +174,27 @@ rm_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma,
 #DeepDive species plot
 DD_sp <- ggplot(counts, aes(x = mid_ma, y = DD_median, group = level, col = level,
                              fill = level)) +
+  annotate(geom = "rect",
+           xmin = c(293.52, 283.5, 268.8, 259.1, 251.9, 247.2),
+           xmax = c(290.1, 272.95, 265.1, 254.14, 251.2, 242),
+           ymin = -Inf, ymax = Inf,
+           colour = "grey", alpha = 0.2, linewidth = 0)  +
   geom_ribbon(aes(ymax = DD_max, ymin = DD_min), alpha = 0.5) +
   geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = NULL, y = "DeepDive diversity estimate") +
-  scale_colour_manual(values = c("grey", "black")) +
-  scale_fill_manual(values = c("grey", "black")) +
+  scale_colour_manual(values = c("darkgrey", "black")) +
+  scale_fill_manual(values = c("darkgrey", "black")) +
   theme_classic() + theme(legend.title = element_blank(),
                           axis.text.x = element_blank(),
                           axis.ticks.x = element_blank())
 
 #DeepDive genus plot
 DD_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = DD_median)) +
+  annotate(geom = "rect",
+           xmin = c(293.52, 283.5, 268.8, 259.1, 251.9, 247.2),
+           xmax = c(290.1, 272.95, 265.1, 254.14, 251.2, 242),
+           ymin = -Inf, ymax = Inf,
+           colour = "grey", alpha = 0.2, linewidth = 0)  +
   geom_ribbon(aes(ymax = DD_max, ymin = DD_min), alpha = 0.5) +
   geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = NULL, y = "DeepDive diversity estimate") +
@@ -181,14 +222,12 @@ axis_gen <- ggplot(counts, aes(x = mid_ma)) +
   theme_classic() + theme(legend.title = element_blank())
 
 #Create and arrange composite plots
-species_plot <- ggarrange(raw_sp, rt_sp, rf_sp, squares_sp, sqs_sp, rm_sp,
-                          DD_sp, axis_sp,
+species_plot <- ggarrange(raw_sp, rt_sp, rf_sp, sqs_sp, rm_sp, DD_sp, axis_sp,
                   labels = c("A", "B", "C", "D", "E", "F", "G", NULL),
                   ncol = 1, nrow = 8,
                   heights = c(1, 1, 1, 1, 1, 1, 1, 0.6))
 
-genus_plot <- ggarrange(raw_gen, rt_gen, rf_gen, squares_gen, sqs_gen, rm_gen,
-                        DD_gen, axis_gen,
+genus_plot <- ggarrange(raw_gen, rt_gen, rf_gen, sqs_gen, rm_gen, DD_gen, axis_gen,
                   labels = c("A", "B", "C", "D", "E", "F", "G", NULL),
                   ncol = 1, nrow = 8,
                   heights = c(1, 1, 1, 1, 1, 1, 1, 0.6))
