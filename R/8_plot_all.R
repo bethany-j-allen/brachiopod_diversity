@@ -8,6 +8,7 @@ library(tidyverse)
 library(gridExtra)
 library(ggpubr)
 library(ggthemes)
+library(stringr)
 
 #Create a vector giving the chronological order of stages
 stages <- c("Asselian", "Sakmarian", "Artinskian", "Kungurian", "Roadian",
@@ -28,7 +29,7 @@ raw_sp <- ggplot(counts, aes(x = mid_ma, y = raw, group = level, col = level)) +
           geom_line(linewidth = 2) + scale_x_reverse() +
           labs(x = NULL, y = "Raw count") +
           scale_colour_manual(values = c("darkgrey", "black")) +
-          theme_classic() + theme(legend.title = element_blank(),
+          theme_classic(base_size = 20) + theme(legend.title = element_blank(),
                                   axis.text.x = element_blank(),
                                   axis.ticks.x = element_blank())
 
@@ -42,7 +43,7 @@ raw_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = raw)) +
   geom_vline(xintercept = 251.902, linewidth = 1, linetype = "dashed") +
   geom_line(linewidth = 2) + scale_x_reverse() +
   labs(x = NULL, y = "Raw count") +
-  theme_classic() + theme(legend.title = element_blank(),
+  theme_classic(base_size = 20) + theme(legend.title = element_blank(),
                           axis.text.x = element_blank(),
                           axis.ticks.x = element_blank())
 
@@ -55,9 +56,9 @@ rt_sp <- ggplot(counts, aes(x = mid_ma, y = rt, group = level, col = level)) +
            colour = "grey", alpha = 0.2, linewidth = 0) +
   geom_vline(xintercept = 251.902, linewidth = 1, linetype = "dashed") +
   geom_line(linewidth = 2) + scale_x_reverse() +
-  labs(x = NULL, y = "Range-through count") +
+  labs(x = NULL, y = str_wrap("Range-through count", width = 15)) +
   scale_colour_manual(values = c("darkgrey", "black")) +
-  theme_classic() + theme(legend.title = element_blank(),
+  theme_classic(base_size = 20) + theme(legend.title = element_blank(),
                           axis.text.x = element_blank(),
                           axis.ticks.x = element_blank())
 
@@ -70,8 +71,8 @@ rt_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = rt)) +
            colour = "grey", alpha = 0.2, linewidth = 0) +
   geom_vline(xintercept = 251.902, linewidth = 1, linetype = "dashed") +
   geom_line(linewidth = 2) + scale_x_reverse() +
-  labs(x = NULL, y = "Range-through count") +
-  theme_classic() + theme(legend.title = element_blank(),
+  labs(x = NULL, y = str_wrap("Range-through count", width = 15)) +
+  theme_classic(base_size = 20) + theme(legend.title = element_blank(),
                           axis.text.x = element_blank(),
                           axis.ticks.x = element_blank())
 
@@ -86,10 +87,10 @@ rf_sp <- ggplot(counts, aes(x = mid_ma, y = rf_median, group = level,
   geom_vline(xintercept = 251.902, linewidth = 1, linetype = "dashed") +
   geom_ribbon(aes(ymax = rf_max, ymin = rf_min), alpha = 0.5) +
   geom_line(linewidth = 2) + scale_x_reverse() +
-  labs(x = NULL, y = "Rarefied diversity") +
+  labs(x = NULL, y = str_wrap("Rarefied diversity", width = 15)) +
   scale_colour_manual(values = c("darkgrey", "black")) +
   scale_fill_manual(values = c("darkgrey", "black")) +
-  theme_classic() + theme(legend.title = element_blank(),
+  theme_classic(base_size = 20) + theme(legend.title = element_blank(),
                           axis.text.x = element_blank(),
                           axis.ticks.x = element_blank())
 
@@ -104,8 +105,8 @@ rf_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma,
   geom_vline(xintercept = 251.902, linewidth = 1, linetype = "dashed") +
   geom_ribbon(aes(ymax = rf_max, ymin = rf_min), alpha = 0.5) +
   geom_line(linewidth = 2) + scale_x_reverse() +
-  labs(x = NULL, y = "Rarefied diversity") +
-  theme_classic() + theme(legend.title = element_blank(),
+  labs(x = NULL, y = str_wrap("Rarefied diversity", width = 15)) +
+  theme_classic(base_size = 20) + theme(legend.title = element_blank(),
                           axis.text.x = element_blank(),
                           axis.ticks.x = element_blank())
 
@@ -120,10 +121,10 @@ sqs_sp <- ggplot(counts, aes(x = mid_ma, y = qD, group = level, col = level,
   geom_vline(xintercept = 251.902, linewidth = 1, linetype = "dashed") +
   geom_ribbon(aes(ymax = qD_UCL, ymin = qD_LCL), alpha = 0.5) +
   geom_line(linewidth = 2) + scale_x_reverse() +
-  labs(x = NULL, y = "Coverage-based diversity estimate") +
+  labs(x = NULL, y = str_wrap("Coverage-based diversity est.", width = 15)) +
   scale_colour_manual(values = c("darkgrey", "black")) +
   scale_fill_manual(values = c("darkgrey", "black")) +
-  theme_classic() + theme(legend.title = element_blank(),
+  theme_classic(base_size = 20) + theme(legend.title = element_blank(),
                           axis.text.x = element_blank(),
                           axis.ticks.x = element_blank())
 
@@ -137,8 +138,8 @@ sqs_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = qD)) +
   geom_vline(xintercept = 251.902, linewidth = 1, linetype = "dashed") +
   geom_ribbon(aes(ymax = qD_UCL, ymin = qD_LCL), alpha = 0.5) +
   geom_line(linewidth = 2) + scale_x_reverse() +
-  labs(x = NULL, y = "Coverage-based diversity estimate") +
-  theme_classic() + theme(legend.title = element_blank(),
+  labs(x = NULL, y = str_wrap("Coverage-based diversity est.", width = 15)) +
+  theme_classic(base_size = 20) + theme(legend.title = element_blank(),
                           axis.text.x = element_blank(),
                           axis.ticks.x = element_blank())
 
@@ -153,11 +154,11 @@ rm_sp <- ggplot(counts, aes(x = mid_ma, y = RM_resid, group = level,
   geom_vline(xintercept = 251.902, linewidth = 1, linetype = "dashed") +
   geom_ribbon(aes(ymax = RM_sdupper, ymin = RM_sdlower), alpha = 0.5) +
   geom_line(linewidth = 2) + scale_x_reverse() +
-  labs(x = NULL, y = "Model detrended diversity") +
+  labs(x = NULL, y = str_wrap("Model detrended diversity", width = 15)) +
   scale_colour_manual(values = c("darkgrey", "black")) +
   scale_fill_manual(values = c("darkgrey", "black")) +
   geom_hline(yintercept = 0) +
-  theme_classic() + theme(legend.title = element_blank(),
+  theme_classic(base_size = 20) + theme(legend.title = element_blank(),
                           axis.text.x = element_blank(),
                           axis.ticks.x = element_blank())
 
@@ -173,9 +174,9 @@ rm_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma,
   geom_vline(xintercept = 251.902, linewidth = 1, linetype = "dashed") +
   geom_ribbon(aes(ymax = RM_sdupper, ymin = RM_sdlower), alpha = 0.5) +
   geom_line(linewidth = 2) + scale_x_reverse() +
-  labs(x = NULL, y = "Model detrended diversity") +
+  labs(x = NULL, y = str_wrap("Model detrended diversity", width = 15)) +
   geom_hline(yintercept = 0) +
-  theme_classic() + theme(legend.title = element_blank(),
+  theme_classic(base_size = 20) + theme(legend.title = element_blank(),
                           axis.text.x = element_blank(),
                           axis.ticks.x = element_blank())
 
@@ -189,11 +190,13 @@ DD_sp <- ggplot(counts, aes(x = mid_ma, y = DD_median, group = level, col = leve
            colour = "grey", alpha = 0.2, linewidth = 0) +
   geom_vline(xintercept = 251.902, linewidth = 1, linetype = "dashed") +
   geom_ribbon(aes(ymax = DD_max, ymin = DD_min), alpha = 0.5) +
-  geom_line(linewidth = 2) + scale_x_reverse() +
-  labs(x = "Millions of years (Ma)", y = "DeepDive diversity estimate") +
+  geom_line(linewidth = 2) +
+  scale_x_reverse(breaks = c(290, 280, 270, 260, 250, 240)) +
+  labs(x = "Millions of years (Ma)",
+       y = str_wrap("DeepDive diversity est.", width = 15)) +
   scale_colour_manual(values = c("darkgrey", "black")) +
   scale_fill_manual(values = c("darkgrey", "black")) +
-  theme_classic()
+  theme_classic(base_size = 20)
 
 #DeepDive genus plot
 DD_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = DD_median)) +
@@ -204,20 +207,20 @@ DD_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = DD_media
            colour = "grey", alpha = 0.2, linewidth = 0) +
   geom_vline(xintercept = 251.902, linewidth = 1, linetype = "dashed") +
   geom_ribbon(aes(ymax = DD_max, ymin = DD_min), alpha = 0.5) +
-  geom_line(linewidth = 2) + scale_x_reverse() +
-  labs(x = "Millions of years (Ma)", y = "DeepDive diversity estimate") +
-  theme_classic()
+  geom_line(linewidth = 2) +
+  scale_x_reverse(breaks = c(290, 280, 270, 260, 250, 240)) +
+  labs(x = "Millions of years (Ma)",
+       y = str_wrap("DeepDive diversity est.", width = 15)) +
+  theme_classic(base_size = 20)
 
 #Create and arrange composite plots
 species_plot <- ggarrange(raw_sp, rt_sp, rf_sp, sqs_sp, rm_sp, DD_sp,
-                  labels = c("A", "B", "C", "D", "E", "F"),
-                  ncol = 1, nrow = 6,
-                  heights = c(1, 1, 1, 1, 1, 1))
+                  labels = "AUTO", font.label = list(size = 20),
+                  ncol = 1, nrow = 6, align = "hv")
 
 genus_plot <- ggarrange(raw_gen, rt_gen, rf_gen, sqs_gen, rm_gen, DD_gen,
-                  labels = c("A", "B", "C", "D", "E", "F"),
-                  ncol = 1, nrow = 6,
-                  heights = c(1, 1, 1, 1, 1, 1))
+                  labels = "AUTO", font.label = list(size = 20),
+                  ncol = 1, nrow = 6, align = "hv")
 
 #Save
 ggsave(file = "Species_figure.pdf", plot = species_plot, width = 25,
