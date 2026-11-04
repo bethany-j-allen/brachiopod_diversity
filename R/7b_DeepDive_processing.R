@@ -17,8 +17,8 @@ stages <- c("Asselian", "Sakmarian", "Artinskian", "Kungurian", "Roadian",
 counts <- read_csv("data/counts.csv")
 
 #Read in DeepDive results
-DeepDive_genera <- read_csv("data/Empirical_predictions_genera.csv")
-DeepDive_species <- read_csv("data/Empirical_predictions_species.csv")
+DeepDive_genera <- read_csv("DeepDive_outputs/DeepDive_genera/brachiopod_models/Empirical_predictions_.csv")
+DeepDive_species <- read_csv("DeepDive_outputs/DeepDive_species/brachiopod_models/Empirical_predictions_.csv")
 
 #Summarise DeepDive results
 DD_median_genera <- apply(DeepDive_genera, 2, median)
