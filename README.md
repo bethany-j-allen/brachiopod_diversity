@@ -5,13 +5,13 @@ This repository contains data and code for the brachiopod diversity case study i
 # Paleobiology Database data
 
 For this case study, we sourced occurrence data from the Paleobiology Database using the following conditions.
-Date accessed: 17th October 2026
-Taxon: Brachiopoda
-Taxonomic resolution: species
-Preservation: regular (no ichnotaxa or form taxa)
-Interval: Permian to Middle Triassic
-Outputs: full, entry details
-Complete URL: http://paleobiodb.org/data1.2/occs/list.csv?datainfo&rowcount&base_name=Brachiopoda&taxon_reso=species&pres=regular&interval=Permian,Middle%20Triassic&private&pgm=gplates&show=full,entname
+- Date accessed: 17th October 2026
+- Taxon: Brachiopoda
+- Taxonomic resolution: species
+- Preservation: regular (no ichnotaxa or form taxa)
+- Interval: Permian to Middle Triassic
+- Outputs: full, entry details
+- Complete URL: http://paleobiodb.org/data1.2/occs/list.csv?datainfo&rowcount&base_name=Brachiopoda&taxon_reso=species&pres=regular&interval=Permian,Middle%20Triassic&private&pgm=gplates&show=full,entname
 
 A total of 43 data enterers contributed data to the cleaned dataset (n = 27253), with the top five being M. Clapham (24199, 88.8%), U. Merkel (911, 3.3%), B. Allen (389, 1.4%), L. Fall (347, 1.3%) and S. Nurnberg (199, 0.7%).
 
@@ -43,4 +43,4 @@ The files are arranged as follows:
    - DeepDive.yml: File for setting up the Jupyter Notebook environment ready to run DeepDive
 4. DeepDive_outputs
    - Empirical_predictions_genera.csv: Genus-level diversity estimates for each stage bin (columns) for each of the 20 age replicates (rows)
-   - - Empirical_predictions_species.csv: Species-level diversity estimates for each stage bin (columns) for each of the 20 age replicates (rows)
+   - Empirical_predictions_species.csv: Species-level diversity estimates for each stage bin (columns) for each of the 20 age replicates (rows)
