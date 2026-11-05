@@ -2,6 +2,19 @@
 
 This repository contains data and code for the brachiopod diversity case study in Allen, Warnock & Dunhill (2025) “A history of the world imperfectly kept”: Will we ever know how biodiversity has changed over deep time? EcoEvoRxiv, https://doi.org/10.32942/X2DD1V
 
+# Paleobiology Database data
+
+For this case study, we sourced occurrence data from the Paleobiology Database using the following conditions.
+Date accessed: 17th October 2026
+Taxon: Brachiopoda
+Taxonomic resolution: species
+Preservation: regular (no ichnotaxa or form taxa)
+Interval: Permian to Middle Triassic
+Outputs: full, entry details
+Complete URL: http://paleobiodb.org/data1.2/occs/list.csv?datainfo&rowcount&base_name=Brachiopoda&taxon_reso=species&pres=regular&interval=Permian,Middle%20Triassic&private&pgm=gplates&show=full,entname
+
+A total of 43 data enterers contributed data to the cleaned dataset (n = 27253), with the top five being M. Clapham (24199, 88.8%), U. Merkel (911, 3.3%), B. Allen (389, 1.4%), L. Fall (347, 1.3%) and S. Nurnberg (199, 0.7%).
+
 # File structure
 
 The files are arranged as follows:
