@@ -196,7 +196,7 @@ DD_sp <- ggplot(counts, aes(x = mid_ma, y = DD_median, group = level, col = leve
        y = str_wrap("DeepDive diversity est.", width = 15)) +
   scale_colour_manual(values = c("darkgrey", "black")) +
   scale_fill_manual(values = c("darkgrey", "black")) +
-  theme_classic(base_size = 20)
+  theme_classic(base_size = 20) + theme(legend.title = element_blank())
 
 #DeepDive genus plot
 DD_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = DD_median)) +
@@ -211,16 +211,16 @@ DD_gen <- ggplot(filter(counts, level == "genera"), aes(x = mid_ma, y = DD_media
   scale_x_reverse(breaks = c(290, 280, 270, 260, 250, 240)) +
   labs(x = "Millions of years (Ma)",
        y = str_wrap("DeepDive diversity est.", width = 15)) +
-  theme_classic(base_size = 20)
+  theme_classic(base_size = 20) + theme(legend.title = element_blank())
 
 #Create and arrange composite plots
 species_plot <- ggarrange(raw_sp, rt_sp, rf_sp, sqs_sp, rm_sp, DD_sp,
-                  labels = "AUTO", font.label = list(size = 20),
-                  ncol = 1, nrow = 6, align = "hv")
+                  labels = "AUTO", font.label = list(size = 20), label.x = 0.9,
+                  label.y = 0.9, ncol = 1, nrow = 6, align = "hv")
 
 genus_plot <- ggarrange(raw_gen, rt_gen, rf_gen, sqs_gen, rm_gen, DD_gen,
-                  labels = "AUTO", font.label = list(size = 20),
-                  ncol = 1, nrow = 6, align = "hv")
+                  labels = "AUTO", font.label = list(size = 20), label.x = 0.93,
+                  label.y = 0.9, ncol = 1, nrow = 6, align = "hv")
 
 #Save
 ggsave(file = "Species_figure.pdf", plot = species_plot, width = 25,
