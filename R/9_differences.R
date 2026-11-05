@@ -40,28 +40,22 @@ for (i in 1:(length(genus_rows) - 1)){
   results_table[(i*2),6] <- round(((counts$rf_median[species_rows[i+1]] -
                                 counts$rf_median[species_rows[i]])/counts$rf_median[species_rows[i]]) * 100, digits = 2)
 
-  #Squares
-  results_table[(i*2-1),7] <- round(((counts$squares[genus_rows[i+1]] -
-                                  counts$squares[genus_rows[i]])/counts$squares[genus_rows[i]]) * 100, digits = 2)
-  results_table[(i*2),7] <- round(((counts$squares[species_rows[i+1]] -
-                                counts$squares[species_rows[i]])/counts$squares[species_rows[i]]) * 100, digits = 2)
-
   #SQS
-  results_table[(i*2-1),8] <- round(((counts$qD[genus_rows[i+1]] -
+  results_table[(i*2-1),7] <- round(((counts$qD[genus_rows[i+1]] -
                                   counts$qD[genus_rows[i]])/counts$qD[genus_rows[i]]) * 100, digits = 2)
-  results_table[(i*2),8] <- round(((counts$qD[species_rows[i+1]] -
+  results_table[(i*2),7] <- round(((counts$qD[species_rows[i+1]] -
                                 counts$qD[species_rows[i]])/counts$qD[species_rows[i]]) * 100, digits = 2)
 
   #DeepDive
-  results_table[(i*2-1),9] <- round(((counts$DD_median[genus_rows[i+1]] -
+  results_table[(i*2-1),8] <- round(((counts$DD_median[genus_rows[i+1]] -
                                         counts$DD_median[genus_rows[i]])/counts$DD_median[genus_rows[i]]) * 100, digits = 2)
-  results_table[(i*2),9] <- round(((counts$DD_median[species_rows[i+1]] -
+  results_table[(i*2),8] <- round(((counts$DD_median[species_rows[i+1]] -
                                       counts$DD_median[species_rows[i]])/counts$DD_median[species_rows[i]]) * 100, digits = 2)
 }
 
 #Rename columns
 colnames(results_table) <- c("stage", "mid_ma", "level", "raw", "rt", "rf",
-                             "squares", "sqs", "DeepDive")
+                             "sqs", "DeepDive")
 
 #Write table
 write_csv(results_table, "data/differences.csv")
